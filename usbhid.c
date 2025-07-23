@@ -255,7 +255,7 @@ static void hid_set_config(usbd_device *dev, uint16_t wValue)
 
 	systick_set_clocksource(STK_CSR_CLKSOURCE_AHB_DIV8);
 	/* SysTick interrupt every N clock pulses: set reload to N-1 */
-	systick_set_reload(99999);
+	systick_set_reload(49999);
 	systick_interrupt_enable();
 	systick_counter_enable();
 }
@@ -321,13 +321,16 @@ void string_formating(char a, uint8_t *buf){
 	buf[2] = 56;
     } else if (a == '\n'){
 	buf[2] = 88;
+    } else if (a == '@'){
+	buf[0] = 4;
+	buf[2] = 59;
     }
 
 }
 
 void sys_tick_handler(void)
 {
-	static char text[] = "  https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
+	static char text[] = "  @ firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
 	static int tick = 0;
 	uint8_t buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	if ((tick > 100) && (tick < 100 + 2*sizeof(text))) {
