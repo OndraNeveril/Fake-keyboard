@@ -291,10 +291,26 @@ void sys_tick_handler(void)
 {
 	static int tick = 0;
 	uint8_t buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	if (tick % 4 < 2) {
-		buf[2] = 0x04;
-	} else {
+	switch (tick % 12) {
+	case 0:
+		buf[2] = 0x0B;
+		break;
+	case 2:
+		buf[2] = 0x08;
+		break;
+	case 4:
+	case 6:
+		buf[2] = 0x0F;
+		break;
+	case 8:
+		buf[2] = 0x12;
+		break;
+	case 10:
+		buf[2] = 0x2C;
+		break;
+	default:
 		buf[2] = 0x00;
+		break;
 	}
 	tick++;
 	usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
