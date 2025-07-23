@@ -17,6 +17,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ctype.h>
 #include <stdlib.h>
 #include <libopencm3/cm3/nvic.h>
 #include <libopencm3/cm3/systick.h>
@@ -287,31 +288,41 @@ int main(void)
 		usbd_poll(usbd_dev);
 }
 
+void string_formating(char a, uint8_t *buf){
+    if (isdigit(a)) {
+        if (a == '0') {
+            buf[2] = 39;
+        } else {
+            int b = a - '0';
+            buf[2] = 29 + b;
+        }	
+    } else if (isalpha(a)) {
+        if (isupper(a)) {
+            buf[0] = 2;
+            int b = (int)a;
+            buf[2] = b - 61;
+        } else {
+            int b = (int)a;
+            buf[2] = b - 93;
+        }
+    } else if (a == ' '){
+	buf[2] = 44;
+    }
+}
+
 void sys_tick_handler(void)
 {
+	char text[] = "   TOTO je text, kterz bzl napsan USBeckem 416";
 	static int tick = 0;
 	uint8_t buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	switch (tick % 12) {
-	case 0:
-		buf[2] = 0x0B;
-		break;
-	case 2:
-		buf[2] = 0x08;
-		break;
-	case 4:
-	case 6:
-		buf[2] = 0x0F;
-		break;
-	case 8:
-		buf[2] = 0x12;
-		break;
-	case 10:
-		buf[2] = 0x2C;
-		break;
-	default:
-		buf[2] = 0x00;
-		break;
+	if (tick % 2 == 0){
+		unsigned int t = tick/2;
+		if (t >= strlen(text) - 4){
+			tick = 0;
+			t = 0;
+		}
+		string_formating(text[t], (uint8_t*) buf);
 	}
-	tick++;
 	usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
+	tick++;
 }
