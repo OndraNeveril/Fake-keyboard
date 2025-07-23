@@ -307,22 +307,35 @@ void string_formating(char a, uint8_t *buf){
         }
     } else if (a == ' '){
 	buf[2] = 44;
+    } else if (a == '='){
+	buf[2] = 46;
+    } else if (a == ':'){
+	buf[0] = 2;
+	buf[2] = 51;
+    } else if (a == '/'){
+	buf[2] = 56;
+    } else if (a == '.'){
+	buf[2] = 55;
+    } else if (a == '?'){
+	buf[0] = 2;
+	buf[2] = 56;
+    } else if (a == '\n'){
+	buf[2] = 88;
     }
+
 }
 
 void sys_tick_handler(void)
 {
-	char text[] = "   TOTO je text, kterz bzl napsan USBeckem 416";
+	static char text[] = "  https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
 	static int tick = 0;
 	uint8_t buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	if (tick % 2 == 0){
-		unsigned int t = tick/2;
-		if (t >= strlen(text) - 4){
-			tick = 0;
-			t = 0;
+	if ((tick > 100) && (tick < 100 + 2*sizeof(text))) {
+		if (tick % 2 == 0){
+			unsigned int t = (tick - 100)/2;
+			string_formating(text[t], (uint8_t*) buf);
 		}
-		string_formating(text[t], (uint8_t*) buf);
+		usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
 	}
-	usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
 	tick++;
 }
