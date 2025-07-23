@@ -289,22 +289,13 @@ int main(void)
 
 void sys_tick_handler(void)
 {
-	static int x = 0;
-	static int y = 15;
-	static int dir = 10;
-	static int dir2 = -10;
+	static int tick = 0;
 	uint8_t buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	buf[0] = 1;
-/*	x += dir;
-	y += dir2;
-	if (x > 30)
-		dir = -dir;
-	if (x < -30)
-		dir = -dir;
-	if (y > 30)
-		dir2 = -dir2;
-	if (y < -30)
-		dir2 = -dir2;
-*/
-	usbd_ep_write_packet(usbd_dev, 0x81, buf, 4);
+	if (tick % 4 < 2) {
+		buf[2] = 0x04;
+	} else {
+		buf[2] = 0x00;
+	}
+	tick++;
+	usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
 }
