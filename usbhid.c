@@ -333,9 +333,9 @@ void sys_tick_handler(void)
 	static char text[] = "  @ firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
 	static int tick = 0;
 	uint8_t buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	if ((tick > 100) && (tick < 100 + 2*sizeof(text))) {
+	if ((tick > 1000) && (tick < 1000 + 2*sizeof(text))) {
 		if (tick % 2 == 0){
-			unsigned int t = (tick - 100)/2;
+			unsigned int t = (tick - 1000)/2;
 			string_formating(text[t], (uint8_t*) buf);
 		}
 		usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
