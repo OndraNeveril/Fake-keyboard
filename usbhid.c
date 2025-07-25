@@ -325,10 +325,10 @@ void string_formating(char a, uint8_t *buf){
 }
 static int d = 200;
 static char t0[] = "  @";
-static char t1[] = " cmd\n";
-static char t2[] = " notepad script.py\n";
-static char t3[] = " \nimport os\nimport time\nwhile True:\n    os.system('start notepad')\n    time.sleep(1)#&";
-static char t4[] = " python script.py\n"; // firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
+static char t1[] = " cmd\n\n";
+static char t2[] = " notepad script.py\n\n";
+static char t3[] = " \n\nimport webbrowser\n\nwhile True:\n\n    webbrowser.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')#&";
+static char t4[] = " python script.py\n\n"; // firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
 static int tick = 0;
 
 void sys_tick_handler(void)
