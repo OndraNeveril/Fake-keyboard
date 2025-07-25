@@ -323,12 +323,12 @@ void string_formating(char a, uint8_t *buf){
 	buf[2] = 30;
     }
 }
-static int d = 1000;
+static int d = 200;
 static char t0[] = "  @";
-static char t1[] = "cmd\n";
-static char t2[] = "notepad script.py\n";
-static char t3[] = "print('Hello world!')#&";
-static char t4[] = "python script.py\n"; // firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
+static char t1[] = " cmd\n";
+static char t2[] = " notepad script.py\n";
+static char t3[] = " \nimport os\nimport time\nwhile True:\n    os.system('start notepad')\n    time.sleep(1)#&";
+static char t4[] = " python script.py\n"; // firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
 static int tick = 0;
 
 void sys_tick_handler(void)
