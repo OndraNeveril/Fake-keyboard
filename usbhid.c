@@ -306,7 +306,7 @@ void string_formating(char a, uint8_t *buf){
 	buf[0] = 0x08;
     } else if (a == '#'){
 	buf[0] = 0x01;
-	buf[2] = 22;
+	buf[2] = 21;
     } else if (a == '&'){
 	buf[0] = 0x04;
 	buf[2] = 61;	
@@ -323,12 +323,12 @@ void string_formating(char a, uint8_t *buf){
 	buf[2] = 30;
     }
 }
-static int d = 200;
+static int d = 300;
 static char t0[] = "  @";
-static char t1[] = " cmd\n\n";
-static char t2[] = " notepad script.py\n\n";
-static char t3[] = " \n\nimport webbrowser\n\nwhile True:\n\n    webbrowser.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')#&";
-static char t4[] = " python script.py\n\n"; // firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
+static char t1[] = " cmd\n\n\n";
+static char t2[] = " notepad script.py\n";
+static char t3[] = " \nimport webbrowser\nimport time\nwhile True:\n    webbrowser.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')\n    time.sleep(2)#&";
+static char t4[] = "               python script.py\n\n"; // firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
 static int tick = 0;
 
 void sys_tick_handler(void)
