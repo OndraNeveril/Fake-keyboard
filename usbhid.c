@@ -1,22 +1,3 @@
-/*
- * This file is part of the libopencm3 project.
- *
- * Copyright (C) 2010 Gareth McMullin <gareth@blacksphere.co.nz>
- *
- * This library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include <ctype.h>
 #include <stdlib.h>
 #include <libopencm3/cm3/nvic.h>
@@ -322,21 +303,69 @@ void string_formating(char a, uint8_t *buf){
     } else if (a == '\n'){
 	buf[2] = 88;
     } else if (a == '@'){
-	buf[0] = 4;
-	buf[2] = 59;
+	buf[0] = 0x08;
+    } else if (a == '#'){
+	buf[0] = 0x01;
+	buf[2] = 22;
+    } else if (a == '&'){
+	buf[0] = 0x04;
+	buf[2] = 61;	
+    } else if (a == '('){
+	buf[0] = 2;
+	buf[2] = 38;
+    } else if (a == ')'){
+	buf[0] = 2;
+	buf[2] = 39;
+    } else if (a == '\''){
+	buf[2] = 52;
+    } else if (a == '!'){
+	buf[0] = 2;
+	buf[2] = 30;
     }
-
 }
+static int d = 1000;
+static char t0[] = "  @";
+static char t1[] = "cmd\n";
+static char t2[] = "notepad script.py\n";
+static char t3[] = "print('Hello world!')#&";
+static char t4[] = "python script.py\n"; // firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
+static int tick = 0;
 
 void sys_tick_handler(void)
 {
-	static char text[] = "  @ firefox https://www.youtube.com/watch?v=dQw4w9WgXcQ\n";
-	static int tick = 0;
-	uint8_t buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	if ((tick > 1000) && (tick < 1000 + 2*sizeof(text))) {
+		uint8_t buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+	if ((tick > d) && (tick < d + 2*sizeof(t0))) {
 		if (tick % 2 == 0){
-			unsigned int t = (tick - 1000)/2;
-			string_formating(text[t], (uint8_t*) buf);
+			unsigned int t = (tick - d)/2;
+			string_formating(t0[t], (uint8_t*) buf);
+		}
+		usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
+	}
+	if ((tick > 2*d) && (tick < 2*d + 2*sizeof(t1))) {
+		if (tick % 2 == 0){
+			unsigned int t = (tick - 2*d)/2;
+			string_formating(t1[t], (uint8_t*) buf);
+		}
+		usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
+	}
+	if ((tick > 3*d) && (tick < 3*d + 2*sizeof(t2))) {
+		if (tick % 2 == 0){
+			unsigned int t = (tick - 3*d)/2;
+			string_formating(t2[t], (uint8_t*) buf);
+		}
+		usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
+	}
+	if ((tick > 4*d) && (tick < 4*d + 2*sizeof(t3))) {
+		if (tick % 2 == 0){
+			unsigned int t = (tick - 4*d)/2;
+			string_formating(t3[t], (uint8_t*) buf);
+		}
+		usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
+	}if ((tick > 5*d) && (tick < 5*d + 2*sizeof(t4))) {
+		if (tick % 2 == 0){
+			unsigned int t = (tick - 5*d)/2;
+			string_formating(t4[t], (uint8_t*) buf);
 		}
 		usbd_ep_write_packet(usbd_dev, 0x81, buf, 8);
 	}
